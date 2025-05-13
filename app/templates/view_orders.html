@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4">All Orders</h2>
+    {% if orders %}
+        <table class="w-full table-auto border-collapse">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-2 text-left">Order ID</th>
+                    <th class="p-2 text-left">Student ID</th>
+                    <th class="p-2 text-left">Student Name</th>
+                    <th class="p-2 text-left">Created At</th>
+                    <th class="p-2 text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr class="border-t">
+                        <td class="p-2">{{ order.id }}</td>
+                        <td class="p-2">{{ order.student.id }}</td>
+                        <td class="p-2">{{ order.student.first_name }} {{ order.student.last_name }}</td>
+                        <td class="p-2">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td class="p-2 text-center">
+                            <form method="POST" action="{{ url_for('routes.delete_order', order_id=order.id) }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No orders found.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bracu Cafe</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="/" class="text-white text-2xl font-bold">Bracu Cafe</a>
+            <div class="space-x-4">
+                {% if session['user_id'] %}
+                    <a href="{{ url_for('routes.dashboard') if session['role'] == 'student' else url_for('routes.admin_dashboard') }}" class="text-white px-4">Dashboard</a>
+                    <a href="{{ url_for('routes.signout') }}" class="text-white px-4">Sign Out</a>
+                {% else %}
+                    <a href="{{ url_for('routes.signin') }}" class="text-white px-4">Sign In</a>
+                    <a href="{{ url_for('routes.signup') }}" class="text-white px-4">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <main class="py-8">
+        {% block content %}
+        <div class="container mx-auto px-4">
+            <section class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-4">Welcome, {{ admin.username }}!</h2>
+                <p class="text-gray-600 mb-6">Manage menu items, view orders, and oversee student accounts from this dashboard.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Manage Menu Items -->
+                    <div class="bg-blue-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium mb-2">Manage Menu</h3>
+                        <p class="text-gray-700 mb-4">Add, edit, or remove menu items available for students.</p>
+                        <a href="{{ url_for('routes.manage_menu') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Go to Menu</a>
+                    </div>
+
+                    <!-- View Orders -->
+                    <div class="bg-green-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium mb-2">View Orders</h3>
+                        <p class="text-gray-700 mb-4">Review and manage student orders.</p>
+                        <a href="{{ url_for('routes.view_orders') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View Orders</a>
+                    </div>
+
+                    <!-- Manage Students -->
+                    <div class="bg-purple-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium mb-2">create Staff</h3>
+                        <p class="text-gray-700 mb-4">create Staff accounts.</p>
+                        <a href="{{ url_for('routes.create_staff') }}" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">Create staff accounts</a>
+                    </div>
+                    <!-- Manage Students -->
+                    <div class="bg-yellow-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium mb-2">View Staff</h3>
+                        <p class="text-gray-700 mb-4">View Staff accounts.</p>
+                        <a href="{{ url_for('routes.show_staff') }}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">view staff accounts</a>
+                    </div>
+                                        
+                    <div class="bg-yellow-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium mb-2">Assign task</h3>
+                        <p class="text-gray-700 mb-4">assign task to any of the task</p>
+                        <a href="{{ url_for('routes.assign_task') }}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Assign task</a>
+                    </div>
+                        <div class="bg-yellow-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium mb-2">Task progress</h3>
+                        <p class="text-gray-700 mb-4">see the progress of the previous task assigned to the staff members</p>
+                        <a href="{{ url_for('routes.task_progress') }}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Task progress</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+        {% endblock %}
+    </main>
+</body>
+</html>

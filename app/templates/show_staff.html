@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-5xl mx-auto mt-8 p-6 bg-white rounded shadow">
+
+    <h2 class="text-2xl font-bold mb-4">Pending Staff</h2>
+    {% if pending_staff %}
+    <table class="w-full table-auto border mb-8">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="px-4 py-2 border">ID</th>
+                <th class="px-4 py-2 border">Name</th>
+                <th class="px-4 py-2 border">Username</th>
+                <th class="px-4 py-2 border">Status</th>
+                <th class="px-4 py-2 border">Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff in pending_staff %}
+            <tr>
+                <td class="px-4 py-2 border">{{ staff.id }}</td>
+                <td class="px-4 py-2 border">{{ staff.first_name }} {{ staff.last_name }}</td>
+                <td class="px-4 py-2 border">{{ staff.username }}</td>
+                <td class="px-4 py-2 border">{{ staff.status }}</td>
+                <td class="px-4 py-2 border">{{ staff.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-600 mb-6">No pending staff records found.</p>
+    {% endif %}
+
+    <h2 class="text-2xl font-bold mb-4">Accepted Staff</h2>
+    {% if accepted_staff %}
+    <table class="w-full table-auto border mb-8">
+        <thead class="bg-green-100">
+            <tr>
+                <th class="px-4 py-2 border">ID</th>
+                <th class="px-4 py-2 border">Name</th>
+                <th class="px-4 py-2 border">Username</th>
+                <th class="px-4 py-2 border">Status</th>
+                <th class="px-4 py-2 border">Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff in accepted_staff %}
+            <tr>
+                <td class="px-4 py-2 border">{{ staff.id }}</td>
+                <td class="px-4 py-2 border">{{ staff.first_name }} {{ staff.last_name }}</td>
+                <td class="px-4 py-2 border">{{ staff.username }}</td>
+                <td class="px-4 py-2 border">{{ staff.status }}</td>
+                <td class="px-4 py-2 border">{{ staff.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-600 mb-6">No accepted staff records found.</p>
+    {% endif %}
+
+    <h2 class="text-2xl font-bold mb-4">Rejected Staff</h2>
+    {% if rejected_staff %}
+    <table class="w-full table-auto border mb-8">
+        <thead class="bg-red-100">
+            <tr>
+                <th class="px-4 py-2 border">ID</th>
+                <th class="px-4 py-2 border">Name</th>
+                <th class="px-4 py-2 border">Username</th>
+                <th class="px-4 py-2 border">Status</th>
+                <th class="px-4 py-2 border">Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff in rejected_staff %}
+            <tr>
+                <td class="px-4 py-2 border">{{ staff.id }}</td>
+                <td class="px-4 py-2 border">{{ staff.first_name }} {{ staff.last_name }}</td>
+                <td class="px-4 py-2 border">{{ staff.username }}</td>
+                <td class="px-4 py-2 border">{{ staff.status }}</td>
+                <td class="px-4 py-2 border">{{ staff.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-600">No rejected staff records found.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

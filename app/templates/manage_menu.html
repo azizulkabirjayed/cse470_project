@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4">
+    <section class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-4">Add menu here</h2>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="bg-{{ 'red' if category == 'error' else 'green' }}-100 border-{{ 'red' if category == 'error' else 'green' }}-400 text-{{ 'red' if category == 'error' else 'green' }}-700 px-4 py-3 rounded mb-4">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Add Menu Item Form -->
+        <form method="POST" class="mb-8">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="mb-4">
+                <label class="block text-gray-700">Name</label>
+                <input type="text" name="name" class="w-full p-2 border rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Description</label>
+                <textarea name="description" class="w-full p-2 border rounded" required></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Price ($)</label>
+                <input type="number" name="price" step="0.01" class="w-full p-2 border rounded" required>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Item</button>
+        </form>
+
+        <!-- Menu Items List -->
+        <h3 class="text-xl font-medium mb-4">Manage menu items</h3>
+        {% if menu_items %}
+            <ul class="divide-y divide-gray-200">
+                {% for item in menu_items %}
+                    <li class="py-4 flex justify-between items-center">
+                        <div>
+                            <p><strong>{{ item.name }}</strong> - ${{ "%.2f" % item.price }}</p>
+                            <p class="text-gray-600">{{ item.description }}</p>
+                        </div>
+                        <div class="space-x-2">
+                            <a href="{{ url_for('routes.edit_menu_item', item_id=item.id) }}" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</a>
+                            <form action="{{ url_for('routes.delete_menu_item', item_id=item.id) }}" method="POST" class="inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-600">No menu items available.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

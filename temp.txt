@@ -1,0 +1,2 @@
+db.create_all()
+saves database model to the bracu_cafe.db 

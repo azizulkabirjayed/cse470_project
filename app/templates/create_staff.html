@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4">Pending Staff Requests</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="mb-4 p-3 rounded {{ 'bg-green-100 text-green-700' if category == 'success' else 'bg-red-100 text-red-700' }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    {% if pending_staff %}
+        <table class="w-full table-auto border-collapse">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="p-2 text-left">ID</th>
+                    <th class="p-2 text-left">Name</th>
+                    <th class="p-2 text-left">Username</th>
+                    <th class="p-2 text-left">Status</th>
+                    <th class="p-2 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for staff in pending_staff %}
+                <tr class="border-t">
+                    <td class="p-2">{{ staff.id }}</td>
+                    <td class="p-2">{{ staff.first_name }} {{ staff.last_name }}</td>
+                    <td class="p-2">{{ staff.username }}</td>
+                    <td class="p-2">{{ staff.status.capitalize() }}</td>
+                    <td class="p-2 flex gap-2">
+                        <form method="POST">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="staff_id" value="{{ staff.id }}">
+                            <input type="hidden" name="action" value="approved">
+                            <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Accept</button>
+                        </form>
+                        <form method="POST">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="staff_id" value="{{ staff.id }}">
+                            <input type="hidden" name="action" value="rejected">
+                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No pending staff requests.</p>
+    {% endif %}
+</div>
+{% endblock %}

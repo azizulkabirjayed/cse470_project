@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <section class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-4">Create New Order</h2>
+        <p class="text-gray-600 mb-6">Select menu items and specify quantities to place your order.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-4 rounded {{ 'bg-green-100 text-green-700' if category == 'success' else 'bg-red-100 text-red-700' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('routes.create_order') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {% if menu_items %}
+            <table class="w-full table-auto border-collapse border border-gray-300 mb-6">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="p-2 border">Select</th>
+                        <th class="p-2 border text-left">Name</th>
+                        <th class="p-2 border text-left">Price</th>
+                        <th class="p-2 border text-left">Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in menu_items %}
+                    <tr>
+                        <td class="p-2 border text-center">
+                            <input type="checkbox" name="menu_item_ids" value="{{ item.id }}">
+                        </td>
+                        <td class="p-2 border">{{ item.name }}</td>
+                        <td class="p-2 border">${{ "%.2f" % item.price }}</td>
+                        <td class="p-2 border">
+                            <input type="number" name="quantities" min="1" value="1" class="w-20 p-1 border rounded" />
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Place Order</button>
+            {% else %}
+            <p class="text-gray-600">No menu items available at the moment.</p>
+            {% endif %}
+        </form>
+    </section>
+</div>
+{% endblock %}

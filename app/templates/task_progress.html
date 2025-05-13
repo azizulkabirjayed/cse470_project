@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-6xl mx-auto mt-10 bg-white p-8 rounded shadow">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Task Progress Overview</h2>
+
+    {% if tasks %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300 text-left text-sm">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="py-2 px-4 border-b">Title</th>
+                    <th class="py-2 px-4 border-b">Description</th>
+                    <th class="py-2 px-4 border-b">Assigned To</th>
+                    <th class="py-2 px-4 border-b">Due Date</th>
+                    <th class="py-2 px-4 border-b">Status</th>
+                    <th class="py-2 px-4 border-b">Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr class="hover:bg-gray-50">
+                    <td class="py-2 px-4 border-b">{{ task.title }}</td>
+                    <td class="py-2 px-4 border-b">{{ task.description or 'N/A' }}</td>
+                    <td class="py-2 px-4 border-b">
+                        {{ task.staff.first_name }} {{ task.staff.last_name }}
+                        ({{ task.staff.username }})
+                    </td>
+                    <td class="py-2 px-4 border-b">
+                        {{ task.due_date.strftime('%Y-%m-%d') if task.due_date else 'No Deadline' }}
+                    </td>
+                    <td class="py-2 px-4 border-b">
+                        <span class="inline-block px-2 py-1 text-xs font-semibold rounded-full 
+                            {% if task.status == 'pending' %}
+                                bg-yellow-200 text-yellow-800
+                            {% elif task.status == 'in_progress' %}
+                                bg-blue-200 text-blue-800
+                            {% elif task.status == 'complete' %}
+                                bg-green-200 text-green-800
+                            {% else %}
+                                bg-gray-200 text-gray-800
+                            {% endif %}">
+                            {{ task.status.replace('_', ' ').title() }}
+                        </span>
+                    </td>
+                    <td class="py-2 px-4 border-b">
+                        {{ task.created_at.strftime('%Y-%m-%d') }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-gray-500">No tasks found.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-8 rounded shadow">
+    <h2 class="text-2xl font-bold mb-6 text-center">Sign In</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="mb-4">
+                {% for category, message in messages %}
+                    <p class="text-{{ 'green' if category == 'success' else 'red' }}-600 text-center">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <form method="POST" action="{{ url_for('routes.signin') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-4">
+            <label for="username" class="block text-gray-700">Username</label>
+            <input type="text" id="username" name="username" class="w-full p-2 border rounded" required>
+        </div>
+        <div class="mb-4">
+            <label for="password" class="block text-gray-700">Password</label>
+            <input type="password" id="password" name="password" class="w-full p-2 border rounded" required>
+        </div>
+        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Sign In</button>
+    </form>
+    <p class="mt-4 text-center text-gray-600">
+        Don't have an account? Do
+        <a href="{{ url_for('routes.signup') }}" class="text-blue-600 hover:underline">Sign up as student</a>.
+        or,
+        <a href="{{ url_for('routes.staff_signup') }}" class="text-blue-600 hover:underline">Sign up as staff memeber</a>.
+    </p>
+</div>
+{% endblock %}

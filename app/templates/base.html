@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bracu Cafe</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="/" class="text-white text-2xl font-bold">Bracu Cafe</a>
+            <div class="space-x-4">
+                {% if session['user_id'] %}
+                    <a href="{{ url_for('routes.dashboard') if session['role'] == 'student' else url_for('routes.admin_dashboard') }}" class="text-white px-4">Dashboard</a>
+                    <a href="{{ url_for('routes.signout') }}" class="text-white px-4">Sign Out</a>
+                {% else %}
+                    <a href="{{ url_for('routes.signin') }}" class="text-white px-4">Sign In</a>
+                    <a href="{{ url_for('routes.signup') }}" class="text-white px-4">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <main class="py-8">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

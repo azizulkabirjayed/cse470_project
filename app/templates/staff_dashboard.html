@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto mt-8 bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-6">My Assigned Tasks</h2>
+
+    {% if tasks %}
+    <table class="min-w-full text-left border">
+        <thead>
+            <tr>
+                <th class="px-4 py-2 border">Title</th>
+                <th class="px-4 py-2 border">Description</th>
+                <th class="px-4 py-2 border">Due Date</th>
+                <th class="px-4 py-2 border">Status</th>
+                <th class="px-4 py-2 border">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr class="border-t">
+                <td class="px-4 py-2">{{ task.title }}</td>
+                <td class="px-4 py-2">{{ task.description }}</td>
+                <td class="px-4 py-2">{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else 'N/A' }}</td>
+                <td class="px-4 py-2 capitalize">{{ task.status }}</td>
+                <td class="px-4 py-2">
+                    <form method="POST" class="inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="task_id" value="{{ task.id }}">
+                        <input type="hidden" name="status" value="in_progress">
+                        <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">In Progress</button>
+                    </form>
+                    <form method="POST" class="inline ml-2">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="task_id" value="{{ task.id }}">
+                        <input type="hidden" name="status" value="completed">
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">Complete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No tasks assigned.</p>
+    {% endif %}
+</div>
+{% endblock %}

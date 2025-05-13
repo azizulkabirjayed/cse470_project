@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <section class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-4">My Orders</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-4 rounded {{ 'bg-green-100 text-green-700' if category == 'success' else 'bg-red-100 text-red-700' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if orders %}
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 p-2">Student ID</th>
+                    <th class="border border-gray-300 p-2">Item</th>
+                    <th class="border border-gray-300 p-2">Quantity</th>
+                    <th class="border border-gray-300 p-2">Date</th>
+                    <th class="border border-gray-300 p-2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td class="border border-gray-300 p-2">{{ order.student.id }}</td>
+                    <td class="border border-gray-300 p-2">{{ order.menu_item.name }}</td>
+                    <td class="border border-gray-300 p-2">{{ order.quantity }}</td>
+                    <td class="border border-gray-300 p-2">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td class="border border-gray-300 p-2">
+                        <form method="POST" action="{{ url_for('routes.manage_order') }}">
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-gray-600">You haven't placed any orders yet.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
